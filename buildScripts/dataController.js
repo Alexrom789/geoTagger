@@ -1,5 +1,26 @@
 const Data = require('./DataModel');
 
+var googleMapsClient = require('@google/maps').createClient({
+    key: 'AIzaSyD-B9yL_qkpkcmHC9G6zE2i-odPFNKoEP4'
+  });
+
+  const googleApiHandler = (req, res, next) => {
+      console.log('In API Handler');
+      googleMapsClient.geocode({
+            address: req.body.name
+          }, function(err, response) {
+            if (!err) {
+              console.log('In server side - google map result[0].formatted_address: ',response.json.results[0].formatted_address);
+              req.body.googleInfo.push(response.json.results[0].formatted_address)
+              console.log('req.body.googleInfo',req.body.googleInfo );
+              next();
+            } else {
+              console.log('Error: ',err);
+             next();
+            }
+          });  
+}
+
 const getData = (req, res) => {
     Data.find({}, (err, foundData) => {
         if(err) {
@@ -30,4 +51,4 @@ const postData = (req, res) => {
     });
   }
 
-  module.exports = {getData, postData};
+  module.exports = {googleApiHandler, getData, postData};

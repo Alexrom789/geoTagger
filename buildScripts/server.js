@@ -62,7 +62,7 @@ app.get('/', function (req, res) {
 
 //app.post('/addLocation', function(req, res) {
 app.get('/getResults', dataController.getData);
-app.post('/addLocation', dataController.postData);
+app.post('/addLocation', dataController.googleApiHandler, dataController.postData);
 //   console.log('Req-body:' , req.body);
 //   console.log('In post data!')
 // const DataToSave = {
